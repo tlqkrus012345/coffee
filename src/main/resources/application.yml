@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test
     username: sar
-    password: sar
+    password:
   h2:
     console:
       enabled: true
@@ -20,3 +20,7 @@ spring:
         show-sql: true
         format-sql: true
         default_batch_fetch_size: 1000
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
