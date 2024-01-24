@@ -8,6 +8,9 @@ public class CoffeeApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoffeeApplication.class, args);
+		/*
+		System.out.println(Charset.defaultCharset().displayName());
+		run -> edit configuration -> vmoption -> -ea -Dfile.encoding="UTF-8"
+		*/
 	}
-
 }

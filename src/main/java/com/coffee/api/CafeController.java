@@ -1,19 +1,22 @@
 package com.coffee.api;
 
-import com.coffee.domain.cafe.CafeService;
-import com.coffee.domain.cafe.Menu;
+import com.coffee.api.response.MenuResponse;
+import com.coffee.domain.cafe.service.CafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class CafeController {
     private final CafeService cafeService;
     @GetMapping("/menu")
-    public List<Menu> getMenu() {
-        return cafeService.getMenu();
+    public List<MenuResponse> getMenu() {
+        return cafeService.getMenu().stream()
+                .map(MenuResponse::from)
+                .collect(Collectors.toList());
     }
 }

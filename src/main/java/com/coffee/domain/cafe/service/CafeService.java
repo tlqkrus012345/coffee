@@ -1,5 +1,7 @@
-package com.coffee.domain.cafe;
+package com.coffee.domain.cafe.service;
 
+import com.coffee.domain.cafe.entity.CafeRepository;
+import com.coffee.domain.cafe.dto.MenuDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
