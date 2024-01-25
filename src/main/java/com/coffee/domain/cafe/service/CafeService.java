@@ -36,7 +36,10 @@ public class CafeService {
         //충전한 포인트에서 주문 금액을 차감한다.
         return new OrderDetailDto();
     }
+    @Transactional
     public void chargePoint(PointDto pointDto) {
-
+        Member member = memberRepository.findById(pointDto.getMemberId()).orElseThrow();
+        member.chargePoint(pointDto.getPoint());
+        memberRepository.save(member);
     }
 }
