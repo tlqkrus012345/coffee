@@ -1,15 +1,14 @@
 package com.coffee.api;
 
+import com.coffee.api.request.ChargePointRequest;
 import com.coffee.api.response.MenuResponse;
 import com.coffee.api.response.OrderDetailRequest;
 import com.coffee.api.response.OrderDetailResponse;
 import com.coffee.domain.cafe.dto.OrderDto;
 import com.coffee.domain.cafe.service.CafeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,5 +26,10 @@ public class CafeController {
     @PostMapping("/order")
     public OrderDetailResponse order(@RequestBody OrderDetailRequest orderDetailRequest) {
         return OrderDetailResponse.from(cafeService.pay(cafeService.order(OrderDetailRequest.from(orderDetailRequest))));
+    }
+    @PostMapping("/point")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void chargePoint(@RequestBody ChargePointRequest chargePointRequest) {
+        cafeService.chargePoint(ChargePointRequest.from(chargePointRequest));
     }
 }
