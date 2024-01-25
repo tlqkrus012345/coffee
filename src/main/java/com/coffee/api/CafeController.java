@@ -2,9 +2,8 @@ package com.coffee.api;
 
 import com.coffee.api.request.ChargePointRequest;
 import com.coffee.api.response.MenuResponse;
-import com.coffee.api.response.OrderDetailRequest;
+import com.coffee.api.request.OrderDetailRequest;
 import com.coffee.api.response.OrderDetailResponse;
-import com.coffee.domain.cafe.dto.OrderDto;
 import com.coffee.domain.cafe.service.CafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

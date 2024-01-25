@@ -1,6 +1,6 @@
 package com.coffee.intergration;
 
-import com.coffee.api.response.OrderDetailRequest;
+import com.coffee.api.request.OrderDetailRequest;
 import com.coffee.api.response.OrderDetailResponse;
 import com.coffee.domain.cafe.dto.OrderDetailDto;
 import com.coffee.domain.cafe.dto.OrderDto;

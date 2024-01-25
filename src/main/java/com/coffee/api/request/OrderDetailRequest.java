@@ -1,4 +1,4 @@
-package com.coffee.api.response;
+package com.coffee.api.request;
 
 import com.coffee.domain.cafe.dto.OrderDto;
 import lombok.Builder;
