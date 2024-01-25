@@ -24,7 +24,7 @@ public class CafeController {
     }
     @PostMapping("/order")
     public OrderDetailResponse order(@RequestBody OrderDetailRequest orderDetailRequest) {
-        return OrderDetailResponse.from(cafeService.pay(cafeService.order(OrderDetailRequest.from(orderDetailRequest))));
+        return OrderDetailResponse.from((cafeService.order(OrderDetailRequest.from(orderDetailRequest))));
     }
     @PostMapping("/point")
     @ResponseStatus(HttpStatus.ACCEPTED)

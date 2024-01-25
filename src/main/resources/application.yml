@@ -9,16 +9,13 @@ spring:
       enabled: true
       path: /h2-console
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    database: h2
-    generate-ddl: true
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-        show-sql: true
-        format-sql: true
+        show_sql: true
+        format_sql: true
         default_batch_fetch_size: 1000
     defer-datasource-initialization: true
   sql:

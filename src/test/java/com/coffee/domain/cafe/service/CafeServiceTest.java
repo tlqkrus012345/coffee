@@ -1,9 +1,12 @@
 package com.coffee.domain.cafe.service;
 
 import com.coffee.domain.cafe.dto.MenuDto;
+import com.coffee.domain.cafe.dto.OrderDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.entity.Menu;
+import com.coffee.domain.cafe.entity.Order;
+import com.coffee.domain.cafe.entity.OrderRepository;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import org.assertj.core.api.Assertions;
@@ -32,6 +35,10 @@ class CafeServiceTest {
     private MemberRepository memberRepository;
     @InjectMocks
     private CafeService cafeService;
+    private final Member member = Member.builder()
+            .id(1L)
+            .point(0)
+            .build();
 
     @Test
     @DisplayName("커피 메뉴 불러오기 테스트")
@@ -47,22 +54,15 @@ class CafeServiceTest {
     @Test
     @DisplayName("포인트 충전 테스트")
     void chargePoint() {
-        Member member = Member.builder()
-                .id(1L)
-                .point(0)
-                .build();
-
         PointDto pointDto = PointDto.builder()
                 .memberId(1L)
                 .point(100)
                 .build();
-
         when(memberRepository.findById(pointDto.getMemberId())).thenReturn(Optional.ofNullable((member)));
 
         cafeService.chargePoint(pointDto);
 
         verify(memberRepository, times(1)).save(any(Member.class));
-
         Assertions.assertThat(member.getPoint()).isEqualTo(100);
     }
     private List<Menu> menuList() {
