@@ -1,6 +1,6 @@
 package com.coffee.api.request;
 
-import com.coffee.domain.cafe.dto.OrderDto;
+import com.coffee.domain.order.dto.OrderDto;
 import lombok.Builder;
 
 @Builder

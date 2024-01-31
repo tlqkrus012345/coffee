@@ -1,6 +1,5 @@
-package com.coffee.domain.cafe.dto;
+package com.coffee.domain.order.dto;
 
-import com.coffee.domain.cafe.entity.Order;
 import lombok.Builder;
 import lombok.Getter;
 

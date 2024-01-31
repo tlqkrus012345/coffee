@@ -1,12 +1,9 @@
 package com.coffee.domain.cafe.service;
 
 import com.coffee.domain.cafe.dto.MenuDto;
-import com.coffee.domain.cafe.dto.OrderDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.cafe.entity.Order;
-import com.coffee.domain.cafe.entity.OrderRepository;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import org.assertj.core.api.Assertions;
@@ -18,12 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.awaitility.Awaitility.given;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

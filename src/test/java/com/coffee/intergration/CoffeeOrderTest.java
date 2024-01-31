@@ -1,26 +1,21 @@
 package com.coffee.intergration;
 
 import com.coffee.api.request.OrderDetailRequest;
-import com.coffee.api.response.OrderDetailResponse;
-import com.coffee.domain.cafe.dto.OrderDetailDto;
-import com.coffee.domain.cafe.dto.OrderDto;
+import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Order;
-import com.coffee.domain.cafe.entity.OrderRepository;
+import com.coffee.domain.order.entity.Order;
+import com.coffee.domain.order.entity.OrderRepository;
 import com.coffee.domain.cafe.service.CafeService;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.external.ExternalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -67,7 +62,7 @@ class CoffeeOrderTest {
 
         //then
         verify(orderRepository, times(1)).save(any(Order.class));
-        Assertions.assertThat()
+        //Assertions.assertThat()
         //OrderDetailResponse apiResult = OrderDetailResponse.from(result);
 
         mockMvc.perform(post("/order")

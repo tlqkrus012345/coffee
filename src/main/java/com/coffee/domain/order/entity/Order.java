@@ -1,6 +1,5 @@
-package com.coffee.domain.cafe.entity;
+package com.coffee.domain.order.entity;
 
-import com.coffee.domain.cafe.dto.OrderDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +14,6 @@ public class Order {
     private Long id;
     private Long memberId;
     private Long menuId;
-    private String name;
+    private String menuName;
     private int price;
 }

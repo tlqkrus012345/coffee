@@ -1,12 +1,12 @@
 package com.coffee.domain.cafe.service;
 
 import com.coffee.domain.cafe.dto.OrderDetailDto;
-import com.coffee.domain.cafe.dto.OrderDto;
+import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.dto.MenuDto;
 import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.cafe.entity.Order;
+import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class CafeService {
                 .memberId(orderDto.getMemberId())
                 .menuId(menu.getId())
                 .price(menu.getPrice())
-                .name(menu.getName())
+                .menuName(menu.getName())
                 .build();
 
         OrderDetailDto result = pay(order);
