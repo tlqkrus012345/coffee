@@ -16,4 +16,5 @@ public class Order {
     private Long menuId;
     private String menuName;
     private int price;
+    private Boolean isSuccess;
 }
