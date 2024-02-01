@@ -44,9 +44,13 @@ class OrderServiceTest {
                 .memberId(memberId)
                 .menuId(menuId)
                 .build();
+        Menu menu = Menu.builder()
+                .name("아이스 커피")
+                .price(1000)
+                .build();
 
         when(memberRepository.existsById(memberId)).thenReturn(true);
-        when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(any(Menu.class)));
+        when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
 
         orderService.createOrder(orderDto);
 
