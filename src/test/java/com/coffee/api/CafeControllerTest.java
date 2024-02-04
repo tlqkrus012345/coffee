@@ -1,7 +1,7 @@
 package com.coffee.api;
 
-import com.coffee.api.request.ChargePointRequest;
-import com.coffee.api.response.MenuResponse;
+import com.coffee.api.cafe.request.ChargePointRequest;
+import com.coffee.api.cafe.response.MenuResponse;
 import com.coffee.domain.cafe.dto.MenuDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.service.CafeService;

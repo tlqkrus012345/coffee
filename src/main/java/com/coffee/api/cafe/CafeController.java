@@ -1,4 +1,4 @@
-package com.coffee.api;
+package com.coffee.api.cafe;
 
 import com.coffee.api.cafe.request.ChargePointRequest;
 import com.coffee.api.cafe.response.MenuResponse;
@@ -19,10 +19,6 @@ public class CafeController {
         return cafeService.getMenu().stream()
                 .map(MenuResponse::from)
                 .collect(Collectors.toList());
-    }
-    @PostMapping("/order")
-    public OrderDetailResponse order(@RequestBody OrderDetailRequest orderDetailRequest) {
-        return OrderDetailResponse.from((cafeService.order(OrderDetailRequest.from(orderDetailRequest))));
     }
     @PostMapping("/point")
     @ResponseStatus(HttpStatus.ACCEPTED)
