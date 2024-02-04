@@ -1,2 +1,4 @@
-package com.coffee.api.payment;public class PaymentController {
+package com.coffee.api.payment;
+
+public class PaymentController {
 }
