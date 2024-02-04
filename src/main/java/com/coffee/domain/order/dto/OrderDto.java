@@ -8,4 +8,5 @@ import lombok.Getter;
 public class OrderDto {
     private Long memberId;
     private Long menuId;
+    private Long orderId;
 }

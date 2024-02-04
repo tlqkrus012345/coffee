@@ -1,12 +1,8 @@
 package com.coffee.domain.cafe.service;
 
-import com.coffee.domain.cafe.dto.OrderDetailDto;
-import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.dto.MenuDto;
-import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,24 +25,6 @@ public class CafeService {
                         .price(entity.getPrice())
                         .build())
                 .collect(Collectors.toList());
-    }
-    public OrderDetailDto order(OrderDto orderDto) {
-        Menu menu = cafeRepository.findById(orderDto.getMenuId()).orElseThrow();
-
-        Order order = Order.builder()
-                .memberId(orderDto.getMemberId())
-                .menuId(menu.getId())
-                .price(menu.getPrice())
-                .menuName(menu.getName())
-                .build();
-
-        OrderDetailDto result = pay(order);
-
-        return result;
-    }
-    public OrderDetailDto pay(Order order) {
-        //충전한 포인트에서 주문 금액을 차감한다.
-        return new OrderDetailDto();
     }
     @Transactional
     public void chargePoint(PointDto pointDto) {

@@ -16,7 +16,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
     private final OrderRepository orderRepository;
-    public void createOrder(OrderDto orderDto) {
+    public OrderDto createOrder(OrderDto orderDto) {
         Long memberId = orderDto.getMemberId();
         Long menuId = orderDto.getMenuId();
 
@@ -31,6 +31,7 @@ public class OrderService {
                 .menuName(menu.getName())
                 .build();
 
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        return OrderDto.builder().orderId(savedOrder.getId()).build();
     }
 }
