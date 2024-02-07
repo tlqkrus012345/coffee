@@ -52,10 +52,16 @@ class PaymentServiceTest {
         Member member = Member.builder()
                 .point(10000)
                 .build();
+        Menu menu = Menu.builder()
+                .name("아이스 커피")
+                .price(1500)
+                .cnt(0)
+                .build();
 
         Long orderId = 1L;
         when(orderRepository.findById(orderId)).thenReturn(Optional.ofNullable(order));
         when(memberRepository.findById(order.getMemberId())).thenReturn(Optional.ofNullable(member));
+        when(cafeRepository.findById(order.getMenuId())).thenReturn(Optional.ofNullable(menu));
 
         paymentService.pay(orderId);
 

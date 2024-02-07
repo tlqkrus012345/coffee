@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -31,6 +33,8 @@ public class OrderService {
                 .menuId(menuId)
                 .price(menu.getPrice())
                 .menuName(menu.getName())
+                .createdAt(LocalDateTime.now())
+                .isPaySuccess(false)
                 .build();
 
         Order savedOrder = orderRepository.save(order);

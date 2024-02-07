@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @Entity
@@ -21,5 +23,9 @@ public class Order {
     private Long menuId;
     private String menuName;
     private int price;
-    private Boolean isSuccess;
+    private Boolean isPaySuccess;
+    private LocalDateTime createdAt;
+    public void successOrder() {
+        this.isPaySuccess = true;
+    }
 }

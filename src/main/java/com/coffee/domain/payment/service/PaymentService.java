@@ -23,6 +23,7 @@ public class PaymentService {
         Order order = orderRepository.findById(orderId).orElseThrow();
         Member member = memberRepository.findById(order.getMemberId()).orElseThrow();
         int coffeePrice = order.getPrice();
+
         if (coffeePrice < member.getPoint()) {
             member.usePoint(coffeePrice);
             memberRepository.save(member);
@@ -30,12 +31,13 @@ public class PaymentService {
             throw new RuntimeException();
         }
 
-        increaseMenuCnt(order.getMenuId());
-
         Payment payment = Payment.builder()
                 .order(order)
                 .build();
         paymentRepository.save(payment);
+
+        increaseMenuCnt(order.getMenuId());
+
         return PaymentDto.builder()
                 .remainPoint(member.getPoint())
                 .build();
