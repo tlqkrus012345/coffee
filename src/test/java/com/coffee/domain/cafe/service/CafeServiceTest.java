@@ -6,6 +6,8 @@ import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
+import com.coffee.domain.order.entity.Order;
+import com.coffee.domain.order.entity.OrderRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +31,8 @@ class CafeServiceTest {
     private CafeRepository cafeRepository;
     @Mock
     private MemberRepository memberRepository;
+    @Mock
+    private OrderRepository orderRepository;
     @InjectMocks
     private CafeService cafeService;
     private final Member member = Member.builder()
@@ -66,20 +72,40 @@ class CafeServiceTest {
     메뉴 엔티티에 cnt 컬럼을 추가 (메뉴 주문 시 동시성)
     메뉴레포에서 cnt 기준으로 상위 3개 메뉴를 불러온다 (메뉴 이름과 가격 그리고 주문 횟수)
 
-    메뉴 카운트하면서 bestMenu 테이블에도 하나씩 추가
+    7일 데이터 가져온 뒤 menu를 카운트
      */
     @Test
     @DisplayName("인기 메뉴 목록 조회 테스트")
     void bestMenu() {
+        List<String> bestMenu = Arrays.asList("커피0", "커피1", "커피2");
 
+        when(orderRepository.findByCreatedAtBetween(any(), any())).thenReturn(orderList());
+
+        List<String> result = cafeService.getBestWeekMenu();
+
+        Assertions.assertThat((result)).isEqualTo(bestMenu);
+    }
+    private List<Order> orderList() {
+        List<Order> orderList = new ArrayList<>();
+        for (int i=0; i<=10; i++) {
+            orderList.add(Order.builder()
+                    .memberId((long) i)
+                    .menuId((long) i)
+                    .price(1000)
+                    .menuName("커피" + (i/3))
+                    .createdAt(LocalDateTime.now().plusDays(i))
+                    .isPaySuccess(false)
+                    .build());
+        }
+        return orderList;
     }
 
     private List<Menu> menuList() {
         List<Menu> menuList = new ArrayList<>();
         for (int i=0; i<5; i++) {
             menuList.add(Menu.builder()
-                            .name(i + "커피")
-                            .price(i * 100)
+                    .name(i + "커피")
+                    .price(i * 100)
                     .build());
         }
         return menuList;
