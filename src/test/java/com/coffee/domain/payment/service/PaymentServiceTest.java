@@ -6,6 +6,7 @@ import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.order.entity.OrderRepository;
 import com.coffee.domain.payment.entity.Payment;
 import com.coffee.domain.payment.entity.PaymentRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,5 +55,6 @@ class PaymentServiceTest {
         paymentService.pay(orderId);
 
         verify(paymentRepository, times(1)).save(any(Payment.class));
+        Assertions.assertThat(member.getPoint()).isEqualTo(9000);
     }
 }
