@@ -39,6 +39,7 @@ public class PaymentService {
         paymentRepository.save(payment);
 
         increaseMenuCnt(order.getMenuId());
+        isPaySuccess(order);
 
         return PaymentDto.builder()
                 .remainPoint(member.getPoint())
