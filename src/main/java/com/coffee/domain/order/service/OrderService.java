@@ -9,6 +9,7 @@ import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.order.entity.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
     private final OrderRepository orderRepository;
+    @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
         Long memberId = orderDto.getMemberId();
         Long menuId = orderDto.getMenuId();
@@ -32,6 +34,8 @@ public class OrderService {
                 .build();
 
         Order savedOrder = orderRepository.save(order);
-        return OrderDto.builder().orderId(savedOrder.getId()).build();
+        return OrderDto.builder()
+                .orderId(savedOrder.getId())
+                .build();
     }
 }

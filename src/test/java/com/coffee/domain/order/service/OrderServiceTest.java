@@ -3,7 +3,6 @@ package com.coffee.domain.order.service;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.entity.Menu;
 import com.coffee.domain.order.entity.Order;
-import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.entity.OrderRepository;
@@ -48,9 +47,16 @@ class OrderServiceTest {
                 .name("아이스 커피")
                 .price(1000)
                 .build();
+        Order order = Order.builder()
+                .memberId(memberId)
+                .menuId(menuId)
+                .price(menu.getPrice())
+                .menuName(menu.getName())
+                .build();
 
         when(memberRepository.existsById(memberId)).thenReturn(true);
         when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
+        when(orderRepository.save(any())).thenReturn(order);
 
         orderService.createOrder(orderDto);
 
