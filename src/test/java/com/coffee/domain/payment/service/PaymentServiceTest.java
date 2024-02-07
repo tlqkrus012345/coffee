@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -85,5 +86,21 @@ class PaymentServiceTest {
         paymentService.increaseMenuCnt(menuId);
 
         Assertions.assertThat(menu.getCnt()).isEqualTo(1);
+    }
+    @Test
+    @DisplayName("커피 주문 결제 완료 후 오더의 isPaySuccess가 True 테스트")
+    void isPaySuccessTest() {
+        Order order = Order.builder()
+                .memberId(1L)
+                .menuId(1L)
+                .price(1000)
+                .menuName("아이스 커피")
+                .createdAt(LocalDateTime.now())
+                .isPaySuccess(false)
+                .build();
+
+        paymentService.isPaySuccess(order);
+
+        Assertions.assertThat(order.getIsPaySuccess()).isTrue();
     }
 }
