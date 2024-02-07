@@ -1,6 +1,7 @@
 package com.coffee.api.order;
 
 import com.coffee.api.order.request.CreateOrderRequest;
+import com.coffee.api.order.response.CreateOrderResponse;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    @PostMapping
-    public OrderDto createOrder(@RequestBody CreateOrderRequest request) {
-        return orderService.createOrder(CreateOrderRequest.from(request));
+    @PostMapping("/order")
+    public CreateOrderResponse createOrder(@RequestBody CreateOrderRequest request) {
+        OrderDto dto = orderService.createOrder(CreateOrderRequest.from(request));
+        return CreateOrderResponse.from(dto);
     }
 }
