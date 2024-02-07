@@ -11,6 +11,7 @@ import com.coffee.domain.payment.entity.Payment;
 import com.coffee.domain.payment.entity.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
+    @Transactional
     public PaymentDto pay(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         Member member = memberRepository.findById(order.getMemberId()).orElseThrow();
@@ -45,5 +47,9 @@ public class PaymentService {
     public void increaseMenuCnt(Long menuId) {
         Menu menu = cafeRepository.findById(menuId).orElseThrow();
         menu.increaseMenuCnt();
+    }
+    public void isPaySuccess(Order order) {
+        order.successOrder();
+        orderRepository.save(order);
     }
 }
