@@ -1,5 +1,7 @@
 package com.coffee.domain.payment.service;
 
+import com.coffee.domain.cafe.entity.CafeRepository;
+import com.coffee.domain.cafe.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.entity.Order;
@@ -16,6 +18,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
+    private final CafeRepository cafeRepository;
     public PaymentDto pay(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         Member member = memberRepository.findById(order.getMemberId()).orElseThrow();
@@ -26,6 +29,9 @@ public class PaymentService {
         } else {
             throw new RuntimeException();
         }
+
+        increaseMenuCnt(order.getMenuId());
+
         Payment payment = Payment.builder()
                 .order(order)
                 .build();
@@ -33,5 +39,9 @@ public class PaymentService {
         return PaymentDto.builder()
                 .remainPoint(member.getPoint())
                 .build();
+    }
+    public void increaseMenuCnt(Long menuId) {
+        Menu menu = cafeRepository.findById(menuId).orElseThrow();
+        menu.increaseMenuCnt();
     }
 }

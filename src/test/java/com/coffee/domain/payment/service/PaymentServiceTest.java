@@ -76,7 +76,7 @@ class PaymentServiceTest {
                 .build();
         when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
 
-        menu.increaseMenuCnt();
+        paymentService.increaseMenuCnt(menuId);
 
         Assertions.assertThat(menu.getCnt()).isEqualTo(1);
     }
