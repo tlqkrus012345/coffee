@@ -59,6 +59,18 @@ class CafeServiceTest {
         verify(memberRepository, times(1)).save(any(Member.class));
         Assertions.assertThat(member.getPoint()).isEqualTo(100);
     }
+    /*인기메뉴 목록 조회
+    최근7일간인기있는메뉴3개를조회하는API.
+    메뉴별주문횟수가정확해야합니다
+    메뉴 엔티티에 cnt 컬럼을 추가 (메뉴 주문 시 동시성)
+    메뉴레포에서 cnt 기준으로 상위 3개 메뉴를 불러온다 (메뉴 이름과 가격 그리고 주문 횟수)
+     */
+    @Test
+    @DisplayName("인기 메뉴 목록 조회 테스트")
+    void bestMenu() {
+
+    }
+
     private List<Menu> menuList() {
         List<Menu> menuList = new ArrayList<>();
         for (int i=0; i<5; i++) {

@@ -1,5 +1,7 @@
 package com.coffee.domain.payment.service;
 
+import com.coffee.domain.cafe.entity.CafeRepository;
+import com.coffee.domain.cafe.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.entity.Order;
@@ -29,7 +31,10 @@ class PaymentServiceTest {
     private MemberRepository memberRepository;
     @Mock
     private PaymentRepository paymentRepository;
+    @Mock
+    private CafeRepository cafeRepository;
     /*
+    커피 Order가 성공한 뒤 결제가 성공한다
     주문id를 받고 그 주문 id를 통해 회원과 메뉴를 가져온다
     회원의 포인트가 충분하다면 결제를 진행
     회원의 포인트를 감소
@@ -56,5 +61,23 @@ class PaymentServiceTest {
 
         verify(paymentRepository, times(1)).save(any(Payment.class));
         Assertions.assertThat(member.getPoint()).isEqualTo(9000);
+    }
+    /*
+    유저의 포인트가 결제되면 Menu의 cnt가 증가한다
+     */
+    @Test
+    @DisplayName("커피 주문 결제 완료 후 메뉴의 cnt 컬럼 증가 테스트")
+    void increaseMenuCntTest() {
+        Long menuId = 1L;
+        Menu menu = Menu.builder()
+                .name("아이스 커피")
+                .price(1500)
+                .cnt(0)
+                .build();
+        when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
+
+        menu.increaseMenuCnt();
+
+        Assertions.assertThat(menu.getCnt()).isEqualTo(1);
     }
 }
