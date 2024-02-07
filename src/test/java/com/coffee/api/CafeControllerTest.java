@@ -1,5 +1,6 @@
 package com.coffee.api;
 
+import com.coffee.api.cafe.CafeController;
 import com.coffee.api.cafe.request.ChargePointRequest;
 import com.coffee.api.cafe.response.MenuResponse;
 import com.coffee.domain.cafe.dto.MenuDto;
