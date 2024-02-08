@@ -1,5 +1,6 @@
 package com.coffee.domain.cafe.service;
 
+import com.coffee.domain.cafe.dto.BestMenuDto;
 import com.coffee.domain.cafe.dto.MenuDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
@@ -17,10 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -72,18 +70,24 @@ class CafeServiceTest {
     메뉴 엔티티에 cnt 컬럼을 추가 (메뉴 주문 시 동시성)
     메뉴레포에서 cnt 기준으로 상위 3개 메뉴를 불러온다 (메뉴 이름과 가격 그리고 주문 횟수)
 
-    7일 데이터 가져온 뒤 menu를 카운트
+    7일 데이터 가져온 뒤 order의 menuid를 카운트
      */
     @Test
     @DisplayName("인기 메뉴 목록 조회 테스트")
     void bestMenu() {
-        List<String> bestMenu = Arrays.asList("커피0", "커피1", "커피2");
+        LocalDateTime startDateTime = LocalDateTime.now();
+        LocalDateTime endDateTime = LocalDateTime.now().plusDays(10);
+        BestMenuDto bestMenuDto = new BestMenuDto();
+        bestMenuDto.setStartDateTime(startDateTime);
+        bestMenuDto.setEndDateTime(endDateTime);
+        Map<String, Integer> result = Map.of("커피0", 3 , "커피1" , 3 , "커피2", 3);
 
         when(orderRepository.findByCreatedAtBetween(any(), any())).thenReturn(orderList());
 
-        List<String> result = cafeService.getBestWeekMenu();
+        BestMenuDto bestWeekMenu = cafeService.getBestWeekMenu(bestMenuDto);
+        Map<String, Integer> expected = bestWeekMenu.getBestMenuList();
 
-        Assertions.assertThat((result)).isEqualTo(bestMenu);
+        Assertions.assertThat((bestWeekMenu.getBestMenuList())).isEqualTo(result);
     }
     private List<Order> orderList() {
         List<Order> orderList = new ArrayList<>();
