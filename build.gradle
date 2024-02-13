@@ -25,13 +25,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.h2database:h2'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "org.testcontainers:junit-jupiter:1.19.5"
+	testImplementation "org.testcontainers:mysql:1.19.5"
+	testImplementation 'io.rest-assured:rest-assured:5.3.2'
 }
 
 tasks.named('test') {
