@@ -10,6 +10,7 @@ import com.coffee.domain.order.entity.OrderRepository;
 import com.coffee.domain.cafe.service.CafeService;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
+import com.coffee.domain.payment.entity.Payment;
 import com.coffee.domain.payment.entity.PaymentRepository;
 import com.coffee.external.ExternalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -96,33 +97,45 @@ class CoffeeOrderTest extends AbstractIntegrationTest{
     @DisplayName("커피 주문/결제 테스트")
     void coffeeOrderTest() throws Exception {
         RequestSpecification request = RestAssured.given();
+        request.header("Content-Type", "application/json");
 
         Map<String, Long> requestParams = new HashMap<>();
         requestParams.put("memberId", 1L);
         requestParams.put("menuId", 1L);
-        request.header("Content-Type", "application/json");
         request.body(requestParams);
 
         Response response = request.post("/order");
         JsonPath jsonPath = response.jsonPath();
-        long orderId = jsonPath.getLong("orderId");
-        Order order = orderRepository.findById(1L).get();
-        Assertions.assertThat(orderId).isEqualTo(order.getId());
+        Menu menu = cafeRepository.findById(1L).get();
+        int price = menu.getPrice();
+        Member member = memberRepository.findById(1L).get();
+        int memberPoint = member.getPoint();
 
-        given()
-                .pathParam("orderId", orderId)
-                .header("Content-Type", "application/json").
-        when()
-                .get("/pay/{orderId}").
-        then()
-                .body(".", eq(1));
+        long orderId = jsonPath.getLong("orderId");
+        Order order = orderRepository.findById(orderId).get();
+
+        Assertions.assertThat(orderId).isEqualTo(order.getId());
+        Assertions.assertThat(price).isEqualTo(1000);
+        Assertions.assertThat(memberPoint).isEqualTo(10000);
+
+        request = RestAssured.given();
+        request.pathParam("orderId", orderId);
+        request.header("Content-Type", "application/json");
+
+        response = request.get("/pay/{orderId}");
+        jsonPath = response.jsonPath();
+
+        int remainPoint = jsonPath.getInt("remainPoint");
+        Payment payment = paymentRepository.findById(1L).get();
+        Assertions.assertThat(payment.getOrder().getId()).isEqualTo(1L);
+        Assertions.assertThat(remainPoint).isEqualTo(9000);
     }
     private void saveMenuAndMember() {
-        for (int i=0; i<5; i++) {
+        for (int i=1; i<=5; i++) {
             cafeRepository.save(Menu.builder()
                     .name(i + "커피")
-                    .price(i * 100)
-                    .cnt(1)
+                    .price(i * 1000)
+                    .cnt(i+1)
                     .build());
         }
         memberRepository.save(Member.builder()
