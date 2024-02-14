@@ -23,6 +23,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CafeController.class)
@@ -38,10 +40,10 @@ class CafeControllerTest {
         when(cafeService.getMenu()).thenReturn(menuDtoList());
         List<MenuResponse> menuResponse = menuResponseList();
 
-        mockMvc.perform(get("/menu")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(menuResponse)))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/menu"))
+                                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(menuResponse)));
     }
     @Test
     @DisplayName("포인트 충전 테스트")
@@ -59,9 +61,10 @@ class CafeControllerTest {
        doNothing().when(cafeService).chargePoint(pointDto);
 
        mockMvc.perform(post("/point")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(new ObjectMapper().writeValueAsString(chargePointRequest)))
-                .andExpect(status().is2xxSuccessful());
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(new ObjectMapper().writeValueAsString(chargePointRequest)))
+               .andDo(print())
+               .andExpect(status().is2xxSuccessful());
     }
 
     private List<MenuDto> menuDtoList() {
