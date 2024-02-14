@@ -87,7 +87,7 @@ class CafeServiceTest {
         BestMenuDto bestWeekMenu = cafeService.getBestWeekMenu(bestMenuDto);
         Map<String, Integer> expected = bestWeekMenu.getBestMenuList();
 
-        Assertions.assertThat((bestWeekMenu.getBestMenuList())).isEqualTo(result);
+        Assertions.assertThat((expected)).isEqualTo(result);
     }
     private List<Order> orderList() {
         List<Order> orderList = new ArrayList<>();
