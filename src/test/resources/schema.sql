@@ -3,6 +3,7 @@ create schema if not exists testDB;
 create table if not exists member (
         member_id bigint not null auto_increment,
         point integer not null,
+        version bigint,
         primary key (member_id)
 );
 

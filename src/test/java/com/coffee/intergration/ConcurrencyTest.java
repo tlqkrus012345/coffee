@@ -11,8 +11,14 @@ import com.coffee.domain.order.service.OrderService;
 import com.coffee.domain.payment.dto.PaymentDto;
 import com.coffee.domain.payment.service.PaymentService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ConcurrencyTest extends AbstractIntegrationTest{
     @Autowired
@@ -33,6 +39,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
     실제 결과 : 13000
      */
     @Test
+    @DisplayName("낙관적 락 : 회원이 동시에 충전과 결제를 진행할 경우 OptimisticLockingFailureException 에러가 발생한다")
     void chargePointAndPay() throws InterruptedException {
         Member member = Member.builder().point(10000).build();
         Menu menu = Menu.builder().price(2000).name("아이스 커피").build();
@@ -44,25 +51,25 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
 
         OrderDto order = orderService.createOrder(orderDto);
 
-        Runnable chargeTask = () -> {
-            cafeService.chargePoint(pointDto);
-        };
-        Runnable payTask = () -> {
-            paymentService.pay(order.getOrderId());
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-        };
+        Future<?> future = executorService.submit(
+                () -> paymentService.pay(order.getOrderId()));
 
-        Thread thread1 = new Thread(chargeTask);
-        Thread thread2 = new Thread(payTask);
+        Future<?> future2 = executorService.submit(
+                () -> cafeService.chargePoint(pointDto));
 
-        thread1.start();
-        thread2.start();
-//        thread2.join();
-        thread1.join();
-
+        Exception result = new Exception();
+        try {
+            future.get();
+            future2.get();
+        } catch (Exception e) {
+            result = (Exception) e.getCause();
+        }
 
         Member chargeMember = memberRepository.findById(1L).get();
         int resultPoint = chargeMember.getPoint();
-        Assertions.assertThat(resultPoint).isEqualTo(13000);
+       // Assertions.assertThat(resultPoint).isEqualTo(13000);
+        Assertions.assertThat(result).isInstanceOf(OptimisticLockingFailureException.class);
     }
 }
