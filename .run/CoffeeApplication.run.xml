@@ -5,7 +5,7 @@
     <option name="VM_PARAMETERS" value="-ea -Dfile.encoding=&quot;UTF-8&quot;" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.coffee.*" />
+        <option name="PATTERN" value="com.coffee.api.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

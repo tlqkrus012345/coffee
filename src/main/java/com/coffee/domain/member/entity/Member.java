@@ -17,8 +17,8 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
     private int point;
-    @Version
-    private Long version;
+//    @Version
+//    private Long version;
     public void chargePoint(int point) {
         this.point += point;
     }

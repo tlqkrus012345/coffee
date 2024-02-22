@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -47,10 +49,10 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         cafeRepository.save(menu);
 
         PointDto pointDto = PointDto.builder().point(5000).memberId(1L).build();
-        OrderDto orderDto = OrderDto.builder().menuId(menu.getId()).memberId(member.getId()).build();
+        OrderDto orderDto = OrderDto.builder().menuId(1L).memberId(1L).build();
 
         OrderDto order = orderService.createOrder(orderDto);
-
+        // 스레드 풀을 만들고 작업을 비동기적으로 실행이 가능하고 작업의 완료를 기다린다.
         ExecutorService executorService = Executors.newFixedThreadPool(2);
 
         Future<?> future = executorService.submit(
@@ -67,9 +69,35 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
             result = (Exception) e.getCause();
         }
 
-        Member chargeMember = memberRepository.findById(1L).get();
-        int resultPoint = chargeMember.getPoint();
-       // Assertions.assertThat(resultPoint).isEqualTo(13000);
         Assertions.assertThat(result).isInstanceOf(OptimisticLockingFailureException.class);
+    }
+    @Test
+    @DisplayName("비관적 락 : 회원이 동시에 충전을 두 번할 경우")
+    void chargePoint() throws InterruptedException {
+        Member member = Member.builder().point(0).build();
+        Long memberId = memberRepository.save(member).getId();
+
+        PointDto pointDto = PointDto.builder().memberId(memberId).point(100).build();
+
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+
+        System.out.println("테스트 시작");
+        for (int i = 0; i < 2; i++) {
+            executorService.submit(() -> {
+                try {
+                    cafeService.chargePoint(pointDto);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+
+        System.out.println("결과 검증");
+//        int point = memberRepository.findById(memberId).orElseThrow().getPoint();
+        List<Member> all = memberRepository.findAll();
+        int point1 = all.get(0).getPoint();
+        Assertions.assertThat(point1).isEqualTo(200);
     }
 }

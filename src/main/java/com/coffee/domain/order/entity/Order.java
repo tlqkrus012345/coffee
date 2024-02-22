@@ -1,5 +1,6 @@
 package com.coffee.domain.order.entity;
 
+import com.coffee.domain.payment.entity.Payment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
