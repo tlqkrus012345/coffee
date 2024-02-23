@@ -21,6 +21,9 @@ abstract class AbstractIntegrationTest {
             .withUsername("testUser")
             .withPassword("testPassword");
 
+    static GenericContainer<?> redisContainer = new GenericContainer<>("redis:6.2.6")
+            .withExposedPorts(6379);
+
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
         System.out.println("===========================");
@@ -28,6 +31,8 @@ abstract class AbstractIntegrationTest {
         registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
         registry.add("spring.datasource.username", mysqlContainer::getUsername);
         registry.add("spring.datasource.password", mysqlContainer::getPassword);
+        registry.add("spring.data.redis.host", redisContainer::getHost);
+        registry.add("spring.data.redis.port", () -> redisContainer.getFirstMappedPort());
         System.out.println("===========================");
     }
     @BeforeAll
@@ -35,6 +40,7 @@ abstract class AbstractIntegrationTest {
         System.out.println("===========================");
         System.out.println("mysqlContainer Start !");
         mysqlContainer.start();
+        redisContainer.start();
         System.out.println("===========================");
     }
     @AfterAll
@@ -42,6 +48,7 @@ abstract class AbstractIntegrationTest {
         System.out.println("===========================");
         System.out.println("mysqlContainer Stop !");
         mysqlContainer.stop();
+        redisContainer.stop();
         System.out.println("===========================");
     }
 }

@@ -13,14 +13,18 @@ import com.coffee.domain.payment.service.PaymentService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class ConcurrencyTest extends AbstractIntegrationTest{
     @Autowired
@@ -42,7 +46,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
      */
     @Test
     @DisplayName("낙관적 락 : 회원이 동시에 충전과 결제를 진행할 경우 OptimisticLockingFailureException 에러가 발생한다")
-    void chargePointAndPay() throws InterruptedException {
+    void optimisticLock() throws InterruptedException {
         Member member = Member.builder().point(10000).build();
         Menu menu = Menu.builder().price(2000).name("아이스 커피").build();
         memberRepository.save(member);
@@ -72,8 +76,8 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         Assertions.assertThat(result).isInstanceOf(OptimisticLockingFailureException.class);
     }
     @Test
-    @DisplayName("비관적 락 : 회원이 동시에 충전을 두 번할 경우")
-    void chargePoint() throws InterruptedException {
+    @DisplayName("비관적 락 : 회원이 동시에 충전을 두 번할 경우 200 충전")
+    void pessimisticLock() throws InterruptedException {
         Member member = Member.builder().point(0).build();
         Long memberId = memberRepository.save(member).getId();
 
@@ -95,9 +99,27 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         countDownLatch.await();
 
         System.out.println("결과 검증");
-//        int point = memberRepository.findById(memberId).orElseThrow().getPoint();
         List<Member> all = memberRepository.findAll();
         int point1 = all.get(0).getPoint();
         Assertions.assertThat(point1).isEqualTo(200);
+    }
+    @Test
+    @DisplayName("분산 락 : ")
+    void distributedLock() {
+
+    }
+    public static class RedissonConfig {
+        private static final String REDISSON_HOST_PREFIX = "redis://";
+        public RedissonClient redissonClient() {
+            RedissonClient redissonClient = null;
+            Config config = new Config();
+            config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisContainer.getHost() + ":" + redisContainer.getFirstMappedPort());
+            redissonClient = Redisson.create(config);
+            return redissonClient;
+        }
+    }
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DistributedLock {
     }
 }
