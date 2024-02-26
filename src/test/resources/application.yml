@@ -2,5 +2,7 @@ spring:
   sql:
     init:
       mode: always
-  jpa:
-    show_sql: true
+
+    jpa:
+      show-sql: true
+

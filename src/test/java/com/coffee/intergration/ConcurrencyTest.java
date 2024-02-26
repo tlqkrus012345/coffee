@@ -1,5 +1,9 @@
 package com.coffee.intergration;
 
+import com.coffee.common.redisson.aop.AopForTransaction;
+import com.coffee.common.redisson.aop.CustomSpringELParser;
+import com.coffee.common.redisson.aop.DistributedLock;
+import com.coffee.common.redisson.aop.DistributedLockAop;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.entity.Menu;
@@ -10,19 +14,33 @@ import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.service.OrderService;
 import com.coffee.domain.payment.dto.PaymentDto;
 import com.coffee.domain.payment.service.PaymentService;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.Redisson;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -75,7 +93,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
 
         Assertions.assertThat(result).isInstanceOf(OptimisticLockingFailureException.class);
     }
-    @Test
+    //@Test
     @DisplayName("비관적 락 : 회원이 동시에 충전을 두 번할 경우 200 충전")
     void pessimisticLock() throws InterruptedException {
         Member member = Member.builder().point(0).build();
@@ -104,22 +122,31 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         Assertions.assertThat(point1).isEqualTo(200);
     }
     @Test
-    @DisplayName("분산 락 : ")
-    void distributedLock() {
+    @DisplayName("분산 락 : 회원이 동시에 충전을 두 번할 경우 200 충전")
+    void distributedLock() throws InterruptedException {
+        Member member = Member.builder().point(0).build();
+        Long memberId = memberRepository.save(member).getId();
 
-    }
-    public static class RedissonConfig {
-        private static final String REDISSON_HOST_PREFIX = "redis://";
-        public RedissonClient redissonClient() {
-            RedissonClient redissonClient = null;
-            Config config = new Config();
-            config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisContainer.getHost() + ":" + redisContainer.getFirstMappedPort());
-            redissonClient = Redisson.create(config);
-            return redissonClient;
+        PointDto pointDto = PointDto.builder().memberId(memberId).point(100).build();
+
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+
+        System.out.println("테스트 시작");
+        for (int i = 0; i < 2; i++) {
+            executorService.submit(() -> {
+                try {
+                    cafeService.chargePoint(pointDto);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
         }
-    }
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface DistributedLock {
+        countDownLatch.await();
+
+        System.out.println("결과 검증");
+        List<Member> all = memberRepository.findAll();
+        int point1 = all.get(0).getPoint();
+        Assertions.assertThat(point1).isEqualTo(200);
     }
 }

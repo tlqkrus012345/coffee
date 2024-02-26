@@ -11,8 +11,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    @Override
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select m from Member m where m.id = :id")
-    Optional<Member> findById(@Param(value = "id") Long id);
+//    @Override
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Query("select m from Member m where m.id = :id")
+//    Optional<Member> findById(@Param(value = "id") Long id);
 }

@@ -1,5 +1,6 @@
 package com.coffee.domain.cafe.service;
 
+import com.coffee.common.redisson.aop.DistributedLock;
 import com.coffee.domain.cafe.dto.BestMenuDto;
 import com.coffee.domain.cafe.dto.PointDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
@@ -32,9 +33,10 @@ public class CafeService {
                         .build())
                 .collect(Collectors.toList());
     }
-    @Transactional
+    @DistributedLock(key = "#key")
+    //@Transactional
     public void chargePoint(PointDto pointDto) {
-        Member member = memberRepository.findById(pointDto.getMemberId()).orElseThrow();
+        Member member = memberRepository.findById(pointDto.getMemberId()).orElseThrow(IllegalArgumentException::new);
         member.chargePoint(pointDto.getPoint());
         memberRepository.save(member);
     }
