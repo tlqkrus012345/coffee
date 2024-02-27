@@ -93,7 +93,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
 
         Assertions.assertThat(result).isInstanceOf(OptimisticLockingFailureException.class);
     }
-    //@Test
+    @Test
     @DisplayName("비관적 락 : 회원이 동시에 충전을 두 번할 경우 200 충전")
     void pessimisticLock() throws InterruptedException {
         Member member = Member.builder().point(0).build();
@@ -117,6 +117,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         countDownLatch.await();
 
         System.out.println("결과 검증");
+        //(memberRepository.findById(memberId).get().getPoint());
         List<Member> all = memberRepository.findAll();
         int point1 = all.get(0).getPoint();
         Assertions.assertThat(point1).isEqualTo(200);
