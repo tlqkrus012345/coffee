@@ -8,7 +8,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,12 +27,14 @@ public class OrderInitializer implements ApplicationRunner {
         Random random = new Random();
         LocalDateTime startDate = LocalDateTime.of(2024,1,28,0,0,0);
         LocalDateTime endDate = LocalDateTime.of(2024,2,28,23,59,59);
+
         for (int i=0; i<10000; i++) {
+            long randomId = random.nextLong(10) + 1;
             Order order = Order.builder()
                     .memberId(i+1L)
-                    .menuId(random.nextLong(10) + 1)
+                    .menuId(randomId)
                     .price(i/100)
-                    .menuName(i + " 커피")
+                    .menuName(randomId + " 커피")
                     .isPaySuccess(true)
                     .createdAt(generateRandomDateTime(startDate, endDate))
                     .build();
@@ -39,11 +43,11 @@ public class OrderInitializer implements ApplicationRunner {
         orderBulkRepository.saveAll(orders);
     }
     public static LocalDateTime generateRandomDateTime(LocalDateTime startDate, LocalDateTime endDate) {
-        long startEpochSecond = startDate.toEpochSecond(ZoneOffset.UTC);
-        long endEpochSecond = endDate.toEpochSecond(ZoneOffset.UTC);
+        long startEpochMilli = startDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long endEpochMilli = endDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
-        long randomEpochSecond = ThreadLocalRandom.current().nextLong(startEpochSecond, endEpochSecond);
+        long randomEpochMilli = ThreadLocalRandom.current().nextLong(startEpochMilli, endEpochMilli);
 
-        return LocalDateTime.ofEpochSecond(randomEpochSecond, 0, ZoneOffset.UTC);
+        return LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(randomEpochMilli), ZoneId.systemDefault());
     }
 }

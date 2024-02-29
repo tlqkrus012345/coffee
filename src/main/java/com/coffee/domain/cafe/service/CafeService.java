@@ -60,10 +60,16 @@ public class CafeService {
         }
 
         List<Map.Entry<String, Integer>> entryList = new LinkedList<>(map.entrySet());
-        entryList.sort((o1, o2) -> o2.getValue() - o1.getValue());
+        entryList.sort((o1, o2) -> {
+            if (o1.getValue() == o2.getValue()) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+            return o2.getValue() - o1.getValue();
+        });
 
         try {
             for (int i = 0; i < 3; i++) {
+
                 bestMenuList.put(entryList.get(i).getKey(), entryList.get(i).getValue());
             }
         } catch (IndexOutOfBoundsException e) {
