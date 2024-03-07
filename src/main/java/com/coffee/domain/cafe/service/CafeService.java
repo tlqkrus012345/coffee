@@ -12,6 +12,7 @@ import com.coffee.domain.order.entity.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -51,7 +52,12 @@ public class CafeService {
         LocalDateTime startDateTime = bestMenuDto.getStartDateTime();
         LocalDateTime endDateTime = bestMenuDto.getEndDateTime();
 
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         List<Order> byCreatedAtBetween = orderRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+        stopWatch.stop();
+
+        System.out.println(stopWatch.prettyPrint());
 
         HashMap<String, Integer> map = new HashMap<>();
         for (Order order : byCreatedAtBetween) {

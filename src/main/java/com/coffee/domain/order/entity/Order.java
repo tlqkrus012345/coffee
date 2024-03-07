@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
+@Table(name = "orders", indexes = @Index(name = "idx_createdAt", columnList = "createdAt"))
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

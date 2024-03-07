@@ -28,7 +28,7 @@ public class OrderInitializer implements ApplicationRunner {
         LocalDateTime startDate = LocalDateTime.of(2024,1,28,0,0,0);
         LocalDateTime endDate = LocalDateTime.of(2024,2,28,23,59,59);
 
-        for (int i=0; i<10000; i++) {
+        for (int i=0; i<100000; i++) {
             long randomId = random.nextLong(10) + 1;
             Order order = Order.builder()
                     .memberId(i+1L)
