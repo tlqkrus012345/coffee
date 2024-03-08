@@ -45,6 +45,7 @@ public class CafeService {
         LocalDateTime 타입으로 시작과 끝을 입력 받는다
         지난 일주일 판매량 1 ~ 3등 메뉴를 반환하는 메소드
     */
+    @Transactional(readOnly = true)
     public BestMenuDto getBestWeekMenu(BestMenuDto bestMenuDto) {
         BestMenuDto result = new BestMenuDto();
         Map<String, Integer> bestMenuList = result.getBestMenuList();
@@ -54,14 +55,13 @@ public class CafeService {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        List<Order> byCreatedAtBetween = orderRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+        List<String> byCreatedAtBetween = orderRepository.findMenuNamesBetweenDates(startDateTime, endDateTime);
         stopWatch.stop();
 
         System.out.println(stopWatch.prettyPrint());
 
         HashMap<String, Integer> map = new HashMap<>();
-        for (Order order : byCreatedAtBetween) {
-            String menuName = order.getMenuName();
+        for (String menuName : byCreatedAtBetween) {
             map.put(menuName, map.getOrDefault(menuName, 0) + 1);
         }
 

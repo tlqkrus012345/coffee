@@ -82,12 +82,19 @@ class CafeServiceTest {
         bestMenuDto.setEndDateTime(endDateTime);
         Map<String, Integer> result = Map.of("커피0", 3 , "커피1" , 3 , "커피2", 3);
 
-        when(orderRepository.findByCreatedAtBetween(any(), any())).thenReturn(orderList());
+        when(orderRepository.findMenuNamesBetweenDates(any(), any())).thenReturn(menuNameList());
 
         BestMenuDto bestWeekMenu = cafeService.getBestWeekMenu(bestMenuDto);
         Map<String, Integer> expected = bestWeekMenu.getBestMenuList();
 
         Assertions.assertThat((expected)).isEqualTo(result);
+    }
+    private List<String> menuNameList() {
+        List<String> list = new ArrayList<>();
+        for (int i=0; i<=10; i++) {
+            list.add("커피" + (i/3));
+        }
+        return list;
     }
     private List<Order> orderList() {
         List<Order> orderList = new ArrayList<>();
