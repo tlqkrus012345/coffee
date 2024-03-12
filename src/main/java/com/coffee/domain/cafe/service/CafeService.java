@@ -55,13 +55,12 @@ public class CafeService {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        List<String> byCreatedAtBetween = orderRepository.findMenuNamesBetweenDates(startDateTime, endDateTime);
-        stopWatch.stop();
 
-        System.out.println(stopWatch.prettyPrint());
+        List<Order> byCreatedAtBetween = orderRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         HashMap<String, Integer> map = new HashMap<>();
-        for (String menuName : byCreatedAtBetween) {
+        for (Order order : byCreatedAtBetween) {
+            String menuName = order.getMenuName();
             map.put(menuName, map.getOrDefault(menuName, 0) + 1);
         }
 
@@ -75,7 +74,6 @@ public class CafeService {
 
         try {
             for (int i = 0; i < 3; i++) {
-
                 bestMenuList.put(entryList.get(i).getKey(), entryList.get(i).getValue());
             }
         } catch (IndexOutOfBoundsException e) {
@@ -83,6 +81,10 @@ public class CafeService {
         }
 
         result.setBestMenuList(bestMenuList);
+
+        stopWatch.stop();
+        System.out.println(stopWatch.prettyPrint());
+
         return result;
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class OrderInitializer implements ApplicationRunner {
     private final OrderBulkRepository orderBulkRepository;
@@ -28,7 +28,7 @@ public class OrderInitializer implements ApplicationRunner {
         LocalDateTime startDate = LocalDateTime.of(2024,1,28,0,0,0);
         LocalDateTime endDate = LocalDateTime.of(2024,2,28,23,59,59);
 
-        for (int i=0; i<100000; i++) {
+        for (int i=0; i<5000000; i++) {
             long randomId = random.nextLong(10) + 1;
             Order order = Order.builder()
                     .memberId(i+1L)
@@ -41,6 +41,7 @@ public class OrderInitializer implements ApplicationRunner {
             orders.add(order);
         }
         orderBulkRepository.saveAll(orders);
+        System.out.println("end order data");
     }
     public static LocalDateTime generateRandomDateTime(LocalDateTime startDate, LocalDateTime endDate) {
         long startEpochMilli = startDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();

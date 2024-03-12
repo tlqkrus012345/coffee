@@ -18,6 +18,14 @@ public class OrderBulkRepository {
 
     @Transactional
     public void saveAll(List<Order> orders) {
+        int batchSize = 100000;
+
+        for (int i=0; i<orders.size(); i+=batchSize) {
+            List<Order> batchOrders = orders.subList(i, Math.min(i + batchSize, orders.size()));
+            insertBatch(batchOrders);
+        }
+    }
+    private void insertBatch(List<Order> orders) {
         String sql = "INSERT INTO orders (member_id, menu_id, menu_name, price, is_pay_success, created_at) VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -31,7 +39,6 @@ public class OrderBulkRepository {
                 ps.setBoolean(5, order.getIsPaySuccess());
                 ps.setTimestamp(6, Timestamp.valueOf(order.getCreatedAt()));
             }
-
             @Override
             public int getBatchSize() {
                 return orders.size();
