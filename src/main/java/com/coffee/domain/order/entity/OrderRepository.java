@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query(value = "SELECT * FROM orders o FORCE INDEX (idx_createdAt) WHERE created_at BETWEEN ?1 AND ?2", nativeQuery = true)
-    List<Order> findByCreatedAtBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    @Query(value = "SELECT o.menuName FROM Order o WHERE o.createdAt BETWEEN :startDateTime AND :endDateTime")
+    List<String> findByCreatedAtBetween(@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
 }

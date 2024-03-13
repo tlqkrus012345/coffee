@@ -56,11 +56,10 @@ public class CafeService {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        List<Order> byCreatedAtBetween = orderRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+        List<String> byCreatedAtBetween = orderRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         HashMap<String, Integer> map = new HashMap<>();
-        for (Order order : byCreatedAtBetween) {
-            String menuName = order.getMenuName();
+        for (String menuName : byCreatedAtBetween) {
             map.put(menuName, map.getOrDefault(menuName, 0) + 1);
         }
 
