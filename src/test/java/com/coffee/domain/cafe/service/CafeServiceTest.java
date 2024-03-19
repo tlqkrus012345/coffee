@@ -8,7 +8,7 @@ import com.coffee.domain.cafe.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.entity.Order;
-import com.coffee.domain.order.entity.OrderRepository;
+import com.coffee.domain.order.repository.OrderRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

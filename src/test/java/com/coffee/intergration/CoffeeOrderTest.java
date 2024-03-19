@@ -1,52 +1,37 @@
 package com.coffee.intergration;
 
 
-import com.coffee.api.order.request.CreateOrderRequest;
 import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.order.entity.Order;
-import com.coffee.domain.order.entity.OrderRepository;
-import com.coffee.domain.cafe.service.CafeService;
+import com.coffee.domain.order.repository.OrderRepository;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.payment.entity.Payment;
 import com.coffee.domain.payment.entity.PaymentRepository;
-import com.coffee.external.ExternalService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.assertj.core.api.Assertions;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 //프로파일 설정 관리,
 class CoffeeOrderTest extends AbstractIntegrationTest{
     @LocalServerPort

@@ -1,16 +1,13 @@
 package com.coffee.common.data;
 
 import com.coffee.domain.order.entity.Order;
-import com.coffee.domain.order.entity.OrderBulkRepository;
+import com.coffee.domain.order.repository.OrderBulkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

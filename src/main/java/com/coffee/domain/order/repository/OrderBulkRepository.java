@@ -1,5 +1,6 @@
-package com.coffee.domain.order.entity;
+package com.coffee.domain.order.repository;
 
+import com.coffee.domain.order.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;

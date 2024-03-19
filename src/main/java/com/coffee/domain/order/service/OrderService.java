@@ -2,11 +2,10 @@ package com.coffee.domain.order.service;
 
 import com.coffee.domain.cafe.entity.CafeRepository;
 import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.entity.Order;
-import com.coffee.domain.order.entity.OrderRepository;
+import com.coffee.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
