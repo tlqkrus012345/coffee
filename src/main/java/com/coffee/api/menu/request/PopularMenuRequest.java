@@ -5,11 +5,11 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 @Getter
-public class BestMenuRequest {
+public class PopularMenuRequest {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
-    public static BestMenuDto from(BestMenuRequest request) {
+    public static BestMenuDto from(PopularMenuRequest request) {
         BestMenuDto dto = new BestMenuDto();
         dto.setStartDateTime(request.getStartDateTime());
         dto.setEndDateTime(request.getEndDateTime());

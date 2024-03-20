@@ -17,18 +17,21 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository{
     private final QOrder order = QOrder.order;
 
     @Override
-    public List<PopularMenuDto> findPopularMenu(LocalDate now) {
+    public List<PopularMenuDto> findPopularMenu(LocalDate start, LocalDate end) {
         return jpaQueryFactory
-                .select(Projections.bean(PopularMenuDto.class, order.memberId, order.menuName, order.menuId.count().as("orderedCnt")))
+                .select(Projections.bean(PopularMenuDto.class,
+                        order.menuId,
+                        order.menuName,
+                        order.menuId.count().as("orderedCnt")))
                 .from(order)
                 .where(
                         new BooleanBuilder()
-                                .and(order.createdAt.goe(now.minusDays(8).atStartOfDay()))
-                                .and(order.createdAt.lt(now.atStartOfDay()))
+                                .and(order.createdAt.goe(start.atStartOfDay()))
+                                .and(order.createdAt.lt(end.atStartOfDay()))
                 )
                 .groupBy(order.menuId, order.menuName)
                 .orderBy(order.menuId.count().desc())
                 .limit(3)
                 .fetch();
-    }
+    };
 }

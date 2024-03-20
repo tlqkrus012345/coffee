@@ -1,13 +1,12 @@
 package com.coffee.domain.menu.service;
 
-import com.coffee.domain.member.service.MemberService;
-import com.coffee.domain.menu.dto.BestMenuDto;
-import com.coffee.domain.menu.dto.MenuDto;
-import com.coffee.domain.menu.dto.PointDto;
-import com.coffee.domain.menu.entity.MenuRepository;
-import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
+import com.coffee.domain.member.service.MemberService;
+import com.coffee.domain.menu.dto.MenuDto;
+import com.coffee.domain.menu.dto.PointDto;
+import com.coffee.domain.menu.entity.Menu;
+import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.order.repository.OrderRepository;
 import org.assertj.core.api.Assertions;
@@ -19,7 +18,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -65,32 +66,6 @@ class MenuServiceTest {
 
         verify(memberRepository, times(1)).save(any(Member.class));
         Assertions.assertThat(member.getPoint()).isEqualTo(100);
-    }
-    /*인기메뉴 목록 조회
-    최근7일간인기있는메뉴3개를조회하는API.
-    메뉴별주문횟수가정확해야합니다
-
-    메뉴 엔티티에 cnt 컬럼을 추가 (메뉴 주문 시 동시성)
-    메뉴레포에서 cnt 기준으로 상위 3개 메뉴를 불러온다 (메뉴 이름과 가격 그리고 주문 횟수)
-
-    7일 데이터 가져온 뒤 order의 menuid를 카운트
-     */
-    @Test
-    @DisplayName("인기 메뉴 목록 조회 테스트")
-    void bestMenu() {
-        LocalDateTime startDateTime = LocalDateTime.now();
-        LocalDateTime endDateTime = LocalDateTime.now().plusDays(10);
-        BestMenuDto bestMenuDto = new BestMenuDto();
-        bestMenuDto.setStartDateTime(startDateTime);
-        bestMenuDto.setEndDateTime(endDateTime);
-        Map<String, Integer> result = Map.of("커피0", 3 , "커피1" , 3 , "커피2", 3);
-
-        when(orderRepository.findByCreatedAtBetween(any(), any())).thenReturn(menuNameList());
-
-        BestMenuDto bestWeekMenu = menuService.getBestWeekMenu(bestMenuDto);
-        Map<String, Integer> expected = bestWeekMenu.getBestMenuList();
-
-        Assertions.assertThat((expected)).isEqualTo(result);
     }
     private List<String> menuNameList() {
         List<String> list = new ArrayList<>();

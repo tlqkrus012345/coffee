@@ -8,5 +8,5 @@ import lombok.Setter;
 public class PopularMenuDto {
     private Long menuId;
     private String menuName;
-    private String orderCnt;
+    private Long orderedCnt;
 }
