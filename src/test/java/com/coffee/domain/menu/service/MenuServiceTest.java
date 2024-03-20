@@ -1,5 +1,6 @@
 package com.coffee.domain.menu.service;
 
+import com.coffee.domain.member.service.MemberService;
 import com.coffee.domain.menu.dto.BestMenuDto;
 import com.coffee.domain.menu.dto.MenuDto;
 import com.coffee.domain.menu.dto.PointDto;
@@ -31,6 +32,8 @@ class MenuServiceTest {
     private MemberRepository memberRepository;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private MemberService memberService;
     @InjectMocks
     private MenuService menuService;
     private final Member member = Member.builder()
@@ -58,7 +61,7 @@ class MenuServiceTest {
                 .build();
         when(memberRepository.findById(pointDto.getMemberId())).thenReturn(Optional.ofNullable((member)));
 
-        menuService.chargePoint(pointDto);
+        memberService.chargePoint(pointDto);
 
         verify(memberRepository, times(1)).save(any(Member.class));
         Assertions.assertThat(member.getPoint()).isEqualTo(100);

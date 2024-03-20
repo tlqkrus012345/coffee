@@ -1,8 +1,9 @@
 package com.coffee.api;
 
 import com.coffee.api.menu.MenuController;
-import com.coffee.api.menu.request.ChargePointRequest;
+import com.coffee.api.member.request.ChargePointRequest;
 import com.coffee.api.menu.response.MenuResponse;
+import com.coffee.domain.member.service.MemberService;
 import com.coffee.domain.menu.dto.MenuDto;
 import com.coffee.domain.menu.dto.PointDto;
 import com.coffee.domain.menu.service.MenuService;
@@ -33,7 +34,8 @@ class MenuControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private MenuService menuService;
-
+    @MockBean
+    private MemberService memberService;
     @Test
     @DisplayName("커피 전체 메뉴 불러오기 테스트")
     void getMenuTest() throws Exception {
@@ -58,7 +60,7 @@ class MenuControllerTest {
                      .point(100)
                      .build();
 
-       doNothing().when(menuService).chargePoint(pointDto);
+       doNothing().when(memberService).chargePoint(pointDto);
 
        mockMvc.perform(post("/point")
                .contentType(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package com.coffee.api.menu.request;
+package com.coffee.api.member.request;
 
 import com.coffee.domain.menu.dto.PointDto;
 import lombok.Builder;

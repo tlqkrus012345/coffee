@@ -1,5 +1,6 @@
 package com.coffee.intergration;
 
+import com.coffee.domain.member.service.MemberService;
 import com.coffee.domain.menu.dto.PointDto;
 import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.menu.entity.Menu;
@@ -29,6 +30,8 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
     MemberRepository memberRepository;
     @Autowired
     MenuRepository menuRepository;
+    @Autowired
+    MemberService memberService;
     /*
     회원이 충전과 동시에 결제를 진행한 경우
     회원 기존 포인트 : 10000
@@ -55,7 +58,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
                 () -> paymentService.pay(order.getOrderId()));
 
         Future<?> future2 = executorService.submit(
-                () -> menuService.chargePoint(pointDto));
+                () -> memberService.chargePoint(pointDto));
 
         Exception result = new Exception();
         try {
@@ -82,7 +85,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         for (int i = 0; i < 2; i++) {
             executorService.submit(() -> {
                 try {
-                    menuService.chargePoint(pointDto);
+                    memberService.chargePoint(pointDto);
                 } finally {
                     countDownLatch.countDown();
                 }
@@ -111,7 +114,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         for (int i = 0; i < 2; i++) {
             executorService.submit(() -> {
                 try {
-                    menuService.chargePoint(pointDto);
+                    memberService.chargePoint(pointDto);
                 } finally {
                     countDownLatch.countDown();
                 }

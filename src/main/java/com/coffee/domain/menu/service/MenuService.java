@@ -1,12 +1,8 @@
 package com.coffee.domain.menu.service;
 
-import com.coffee.common.redisson.aop.DistributedLock;
 import com.coffee.domain.menu.dto.BestMenuDto;
-import com.coffee.domain.menu.dto.PointDto;
 import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.menu.dto.MenuDto;
-import com.coffee.domain.member.entity.Member;
-import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +17,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
     @Transactional(readOnly = true)
@@ -32,13 +27,6 @@ public class MenuService {
                         .price(entity.getPrice())
                         .build())
                 .collect(Collectors.toList());
-    }
-    @DistributedLock(key = "#key")
-    //@Transactional
-    public void chargePoint(PointDto pointDto) {
-        Member member = memberRepository.findById(pointDto.getMemberId()).orElseThrow(IllegalArgumentException::new);
-        member.chargePoint(pointDto.getPoint());
-        memberRepository.save(member);
     }
     /*
         LocalDateTime 타입으로 시작과 끝을 입력 받는다
