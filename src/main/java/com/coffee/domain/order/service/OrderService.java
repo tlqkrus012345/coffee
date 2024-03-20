@@ -1,7 +1,7 @@
 package com.coffee.domain.order.service;
 
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Menu;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.entity.Order;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OrderService {
     private final MemberRepository memberRepository;
-    private final CafeRepository cafeRepository;
+    private final MenuRepository menuRepository;
     private final OrderRepository orderRepository;
     @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
@@ -24,7 +24,7 @@ public class OrderService {
         Long menuId = orderDto.getMenuId();
 
         memberRepository.existsById(memberId);
-        Menu menu = cafeRepository.findById(menuId)
+        Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(IllegalArgumentException::new);
 
         Order order = Order.builder()

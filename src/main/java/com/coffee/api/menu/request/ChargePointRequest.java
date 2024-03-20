@@ -1,6 +1,6 @@
-package com.coffee.api.cafe.request;
+package com.coffee.api.menu.request;
 
-import com.coffee.domain.cafe.dto.PointDto;
+import com.coffee.domain.menu.dto.PointDto;
 import lombok.Builder;
 import lombok.Getter;
 

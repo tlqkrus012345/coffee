@@ -1,6 +1,6 @@
-package com.coffee.api.cafe.response;
+package com.coffee.api.menu.response;
 
-import com.coffee.domain.cafe.dto.BestMenuDto;
+import com.coffee.domain.menu.dto.BestMenuDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

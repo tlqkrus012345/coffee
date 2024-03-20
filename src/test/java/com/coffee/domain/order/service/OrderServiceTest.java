@@ -1,7 +1,7 @@
 package com.coffee.domain.order.service;
 
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Menu;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
@@ -23,7 +23,7 @@ class OrderServiceTest {
     @InjectMocks
     private OrderService orderService;
     @Mock
-    private CafeRepository cafeRepository;
+    private MenuRepository menuRepository;
     @Mock
     private MemberRepository memberRepository;
     @Mock
@@ -55,7 +55,7 @@ class OrderServiceTest {
                 .build();
 
         when(memberRepository.existsById(memberId)).thenReturn(true);
-        when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
+        when(menuRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
         when(orderRepository.save(any())).thenReturn(order);
 
         orderService.createOrder(orderDto);

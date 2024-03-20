@@ -1,52 +1,26 @@
 package com.coffee.intergration;
 
-import com.coffee.common.redisson.aop.AopForTransaction;
-import com.coffee.common.redisson.aop.CustomSpringELParser;
-import com.coffee.common.redisson.aop.DistributedLock;
-import com.coffee.common.redisson.aop.DistributedLockAop;
-import com.coffee.domain.cafe.dto.PointDto;
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.cafe.service.CafeService;
+import com.coffee.domain.menu.dto.PointDto;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.entity.Menu;
+import com.coffee.domain.menu.service.MenuService;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.service.OrderService;
-import com.coffee.domain.payment.dto.PaymentDto;
 import com.coffee.domain.payment.service.PaymentService;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.redisson.Redisson;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.*;
 
 public class ConcurrencyTest extends AbstractIntegrationTest{
     @Autowired
-    CafeService cafeService;
+    MenuService menuService;
     @Autowired
     PaymentService paymentService;
     @Autowired
@@ -54,7 +28,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
     @Autowired
     MemberRepository memberRepository;
     @Autowired
-    CafeRepository cafeRepository;
+    MenuRepository menuRepository;
     /*
     회원이 충전과 동시에 결제를 진행한 경우
     회원 기존 포인트 : 10000
@@ -68,7 +42,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         Member member = Member.builder().point(10000).build();
         Menu menu = Menu.builder().price(2000).name("아이스 커피").build();
         memberRepository.save(member);
-        cafeRepository.save(menu);
+        menuRepository.save(menu);
 
         PointDto pointDto = PointDto.builder().point(5000).memberId(1L).build();
         OrderDto orderDto = OrderDto.builder().menuId(1L).memberId(1L).build();
@@ -81,7 +55,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
                 () -> paymentService.pay(order.getOrderId()));
 
         Future<?> future2 = executorService.submit(
-                () -> cafeService.chargePoint(pointDto));
+                () -> menuService.chargePoint(pointDto));
 
         Exception result = new Exception();
         try {
@@ -108,7 +82,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         for (int i = 0; i < 2; i++) {
             executorService.submit(() -> {
                 try {
-                    cafeService.chargePoint(pointDto);
+                    menuService.chargePoint(pointDto);
                 } finally {
                     countDownLatch.countDown();
                 }
@@ -137,7 +111,7 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
         for (int i = 0; i < 2; i++) {
             executorService.submit(() -> {
                 try {
-                    cafeService.chargePoint(pointDto);
+                    menuService.chargePoint(pointDto);
                 } finally {
                     countDownLatch.countDown();
                 }

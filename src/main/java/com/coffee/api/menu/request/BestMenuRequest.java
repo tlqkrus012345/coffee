@@ -1,6 +1,6 @@
-package com.coffee.api.cafe.request;
+package com.coffee.api.menu.request;
 
-import com.coffee.domain.cafe.dto.BestMenuDto;
+import com.coffee.domain.menu.dto.BestMenuDto;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

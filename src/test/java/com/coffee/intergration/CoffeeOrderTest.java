@@ -1,8 +1,8 @@
 package com.coffee.intergration;
 
 
-import com.coffee.domain.cafe.entity.Menu;
-import com.coffee.domain.cafe.entity.CafeRepository;
+import com.coffee.domain.menu.entity.Menu;
+import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.order.repository.OrderRepository;
 import com.coffee.domain.member.entity.Member;
@@ -43,7 +43,7 @@ class CoffeeOrderTest extends AbstractIntegrationTest{
     @Autowired
     MemberRepository memberRepository;
     @Autowired
-    CafeRepository cafeRepository;
+    MenuRepository menuRepository;
 
     @BeforeEach
     void setUp() {
@@ -91,7 +91,7 @@ class CoffeeOrderTest extends AbstractIntegrationTest{
 
         Response response = request.post("/order");
         JsonPath jsonPath = response.jsonPath();
-        Menu menu = cafeRepository.findById(1L).get();
+        Menu menu = menuRepository.findById(1L).get();
         int price = menu.getPrice();
         Member member = memberRepository.findById(1L).get();
         int memberPoint = member.getPoint();
@@ -117,7 +117,7 @@ class CoffeeOrderTest extends AbstractIntegrationTest{
     }
     private void saveMenuAndMember() {
         for (int i=1; i<=5; i++) {
-            cafeRepository.save(Menu.builder()
+            menuRepository.save(Menu.builder()
                     .name(i + "커피")
                     .price(i * 1000)
                     .cnt(i+1)

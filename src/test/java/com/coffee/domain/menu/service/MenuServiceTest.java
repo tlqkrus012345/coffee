@@ -1,10 +1,10 @@
-package com.coffee.domain.cafe.service;
+package com.coffee.domain.menu.service;
 
-import com.coffee.domain.cafe.dto.BestMenuDto;
-import com.coffee.domain.cafe.dto.MenuDto;
-import com.coffee.domain.cafe.dto.PointDto;
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Menu;
+import com.coffee.domain.menu.dto.BestMenuDto;
+import com.coffee.domain.menu.dto.MenuDto;
+import com.coffee.domain.menu.dto.PointDto;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.entity.Order;
@@ -24,15 +24,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CafeServiceTest {
+class MenuServiceTest {
     @Mock
-    private CafeRepository cafeRepository;
+    private MenuRepository menuRepository;
     @Mock
     private MemberRepository memberRepository;
     @Mock
     private OrderRepository orderRepository;
     @InjectMocks
-    private CafeService cafeService;
+    private MenuService menuService;
     private final Member member = Member.builder()
             .id(1L)
             .point(0)
@@ -42,9 +42,9 @@ class CafeServiceTest {
     @DisplayName("커피 메뉴 불러오기 테스트")
     void getMenuTest() {
         //given
-        when(cafeRepository.findAll()).thenReturn(menuList());
+        when(menuRepository.findAll()).thenReturn(menuList());
         //when
-        List<MenuDto> menu = cafeService.getMenu();
+        List<MenuDto> menu = menuService.getMenu();
         //then
         Assertions.assertThat(menu.get(0).getName()).isEqualTo("0커피");
         Assertions.assertThat(menu.get(0).getPrice()).isEqualTo(0);
@@ -58,7 +58,7 @@ class CafeServiceTest {
                 .build();
         when(memberRepository.findById(pointDto.getMemberId())).thenReturn(Optional.ofNullable((member)));
 
-        cafeService.chargePoint(pointDto);
+        menuService.chargePoint(pointDto);
 
         verify(memberRepository, times(1)).save(any(Member.class));
         Assertions.assertThat(member.getPoint()).isEqualTo(100);
@@ -84,7 +84,7 @@ class CafeServiceTest {
 
         when(orderRepository.findByCreatedAtBetween(any(), any())).thenReturn(menuNameList());
 
-        BestMenuDto bestWeekMenu = cafeService.getBestWeekMenu(bestMenuDto);
+        BestMenuDto bestWeekMenu = menuService.getBestWeekMenu(bestMenuDto);
         Map<String, Integer> expected = bestWeekMenu.getBestMenuList();
 
         Assertions.assertThat((expected)).isEqualTo(result);

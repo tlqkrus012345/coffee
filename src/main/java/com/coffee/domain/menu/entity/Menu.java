@@ -1,4 +1,4 @@
-package com.coffee.domain.cafe.entity;
+package com.coffee.domain.menu.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

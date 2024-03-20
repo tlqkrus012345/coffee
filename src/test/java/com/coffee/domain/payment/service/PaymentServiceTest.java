@@ -1,7 +1,7 @@
 package com.coffee.domain.payment.service;
 
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Menu;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.entity.Order;
@@ -33,7 +33,7 @@ class PaymentServiceTest {
     @Mock
     private PaymentRepository paymentRepository;
     @Mock
-    private CafeRepository cafeRepository;
+    private MenuRepository menuRepository;
     /*
     커피 Order가 성공한 뒤 결제가 성공한다
     주문id를 받고 그 주문 id를 통해 회원과 메뉴를 가져온다
@@ -62,7 +62,7 @@ class PaymentServiceTest {
         Long orderId = 1L;
         when(orderRepository.findById(orderId)).thenReturn(Optional.ofNullable(order));
         when(memberRepository.findById(order.getMemberId())).thenReturn(Optional.ofNullable(member));
-        when(cafeRepository.findById(order.getMenuId())).thenReturn(Optional.ofNullable(menu));
+        when(menuRepository.findById(order.getMenuId())).thenReturn(Optional.ofNullable(menu));
 
         paymentService.pay(orderId);
 
@@ -81,7 +81,7 @@ class PaymentServiceTest {
                 .price(1500)
                 .cnt(0)
                 .build();
-        when(cafeRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
+        when(menuRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
 
         paymentService.increaseMenuCnt(menuId);
 

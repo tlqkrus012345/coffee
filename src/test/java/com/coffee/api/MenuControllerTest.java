@@ -1,11 +1,11 @@
 package com.coffee.api;
 
-import com.coffee.api.cafe.CafeController;
-import com.coffee.api.cafe.request.ChargePointRequest;
-import com.coffee.api.cafe.response.MenuResponse;
-import com.coffee.domain.cafe.dto.MenuDto;
-import com.coffee.domain.cafe.dto.PointDto;
-import com.coffee.domain.cafe.service.CafeService;
+import com.coffee.api.menu.MenuController;
+import com.coffee.api.menu.request.ChargePointRequest;
+import com.coffee.api.menu.response.MenuResponse;
+import com.coffee.domain.menu.dto.MenuDto;
+import com.coffee.domain.menu.dto.PointDto;
+import com.coffee.domain.menu.service.MenuService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,17 +27,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CafeController.class)
-class CafeControllerTest {
+@WebMvcTest(MenuController.class)
+class MenuControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private CafeService cafeService;
+    private MenuService menuService;
 
     @Test
     @DisplayName("커피 전체 메뉴 불러오기 테스트")
     void getMenuTest() throws Exception {
-        when(cafeService.getMenu()).thenReturn(menuDtoList());
+        when(menuService.getMenu()).thenReturn(menuDtoList());
         List<MenuResponse> menuResponse = menuResponseList();
 
         mockMvc.perform(get("/menu"))
@@ -58,7 +58,7 @@ class CafeControllerTest {
                      .point(100)
                      .build();
 
-       doNothing().when(cafeService).chargePoint(pointDto);
+       doNothing().when(menuService).chargePoint(pointDto);
 
        mockMvc.perform(post("/point")
                .contentType(MediaType.APPLICATION_JSON)

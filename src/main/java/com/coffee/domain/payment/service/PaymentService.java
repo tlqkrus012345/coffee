@@ -1,7 +1,7 @@
 package com.coffee.domain.payment.service;
 
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.entity.Menu;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.entity.Order;
@@ -19,7 +19,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
-    private final CafeRepository cafeRepository;
+    private final MenuRepository menuRepository;
     @Transactional
     public PaymentDto pay(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
@@ -46,7 +46,7 @@ public class PaymentService {
                 .build();
     }
     public void increaseMenuCnt(Long menuId) {
-        Menu menu = cafeRepository.findById(menuId).orElseThrow();
+        Menu menu = menuRepository.findById(menuId).orElseThrow();
         menu.increaseMenuCnt();
     }
     public void isPaySuccess(Order order) {

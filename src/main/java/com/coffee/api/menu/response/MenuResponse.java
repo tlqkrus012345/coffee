@@ -1,6 +1,6 @@
-package com.coffee.api.cafe.response;
+package com.coffee.api.menu.response;
 
-import com.coffee.domain.cafe.dto.MenuDto;
+import com.coffee.domain.menu.dto.MenuDto;
 import lombok.Getter;
 
 @Getter

@@ -1,10 +1,10 @@
-package com.coffee.domain.cafe.service;
+package com.coffee.domain.menu.service;
 
 import com.coffee.common.redisson.aop.DistributedLock;
-import com.coffee.domain.cafe.dto.BestMenuDto;
-import com.coffee.domain.cafe.dto.PointDto;
-import com.coffee.domain.cafe.entity.CafeRepository;
-import com.coffee.domain.cafe.dto.MenuDto;
+import com.coffee.domain.menu.dto.BestMenuDto;
+import com.coffee.domain.menu.dto.PointDto;
+import com.coffee.domain.menu.entity.MenuRepository;
+import com.coffee.domain.menu.dto.MenuDto;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.repository.OrderRepository;
@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CafeService {
-    private final CafeRepository cafeRepository;
+public class MenuService {
+    private final MenuRepository menuRepository;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
     @Transactional(readOnly = true)
     public List<MenuDto> getMenu() {
-        return cafeRepository.findAll().stream()
+        return menuRepository.findAll().stream()
                 .map(entity -> MenuDto.builder()
                         .name(entity.getName())
                         .price(entity.getPrice())
