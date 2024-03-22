@@ -1,7 +1,7 @@
 package com.coffee.api;
 
-import com.coffee.domain.order.dto.PopularMenuDto;
-import com.coffee.domain.order.service.OrderService;
+import com.coffee.domain.menu.service.MenuService;
+import com.coffee.domain.menu.dto.PopularMenuDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CafeFacade {
 
-    private final OrderService orderService;
+    private final MenuService menuService;
     public List<PopularMenuDto> getPopularMenu(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         LocalDate startDate = startDateTime.toLocalDate();
         LocalDate endDate = endDateTime.toLocalDate();
 
-        return orderService.getPopularMenu(startDate, endDate);
+        return menuService.getPopularMenu(startDate, endDate);
     }
 }

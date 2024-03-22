@@ -4,17 +4,13 @@ import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
-import com.coffee.domain.order.dto.PopularMenuDto;
 import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StopWatch;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,9 +41,5 @@ public class OrderService {
         return OrderDto.builder()
                 .orderId(savedOrder.getId())
                 .build();
-    }
-    @Transactional(readOnly = true)
-    public List<PopularMenuDto> getPopularMenu(LocalDate startDate, LocalDate endDate) {
-        return orderRepository.findPopularMenu(startDate, endDate);
     }
 }

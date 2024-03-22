@@ -4,7 +4,7 @@ import com.coffee.api.CafeFacade;
 import com.coffee.api.menu.request.PopularMenuRequest;
 import com.coffee.api.menu.response.MenuResponse;
 import com.coffee.domain.menu.service.MenuService;
-import com.coffee.domain.order.dto.PopularMenuDto;
+import com.coffee.domain.menu.dto.PopularMenuDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

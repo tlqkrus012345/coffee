@@ -1,6 +1,6 @@
 package com.coffee.domain.order.repository;
 
-import com.coffee.domain.order.dto.PopularMenuDto;
+import com.coffee.domain.menu.dto.PopularMenuDto;
 
 import java.time.LocalDate;
 import java.util.List;

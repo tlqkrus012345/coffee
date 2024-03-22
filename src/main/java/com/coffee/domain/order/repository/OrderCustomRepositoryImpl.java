@@ -1,6 +1,6 @@
 package com.coffee.domain.order.repository;
 
-import com.coffee.domain.order.dto.PopularMenuDto;
+import com.coffee.domain.menu.dto.PopularMenuDto;
 import com.coffee.domain.order.entity.QOrder;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
