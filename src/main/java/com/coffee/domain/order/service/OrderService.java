@@ -1,8 +1,10 @@
 package com.coffee.domain.order.service;
 
+import com.coffee.api.order.request.CreateOrderRequest;
 import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.member.entity.MemberRepository;
+import com.coffee.domain.order.dto.CreateOrderDto;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.order.repository.OrderRepository;
@@ -20,9 +22,9 @@ public class OrderService {
     private final MenuRepository menuRepository;
     private final OrderRepository orderRepository;
     @Transactional
-    public OrderDto createOrder(OrderDto orderDto) {
-        Long memberId = orderDto.getMemberId();
-        Long menuId = orderDto.getMenuId();
+    public OrderDto createOrder(CreateOrderDto createOrderDto) {
+        Long memberId = createOrderDto.getMemberId();
+        Long menuId = createOrderDto.getMenuId();
 
         memberRepository.existsById(memberId);
         Menu menu = menuRepository.findById(menuId)

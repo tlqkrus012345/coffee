@@ -2,6 +2,7 @@ package com.coffee.domain.order.service;
 
 import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.menu.entity.Menu;
+import com.coffee.domain.order.dto.CreateOrderDto;
 import com.coffee.domain.order.entity.Order;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.order.dto.OrderDto;
@@ -54,11 +55,13 @@ class OrderServiceTest {
                 .menuName(menu.getName())
                 .build();
 
+        CreateOrderDto createOrderDto = new CreateOrderDto(memberId, menuId);
+
         when(memberRepository.existsById(memberId)).thenReturn(true);
         when(menuRepository.findById(menuId)).thenReturn(Optional.ofNullable(menu));
         when(orderRepository.save(any())).thenReturn(order);
 
-        orderService.createOrder(orderDto);
+        orderService.createOrder(createOrderDto);
 
         verify(orderRepository, times(1)).save(any(Order.class));
     }

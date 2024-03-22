@@ -7,6 +7,7 @@ import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.menu.service.MenuService;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
+import com.coffee.domain.order.dto.CreateOrderDto;
 import com.coffee.domain.order.dto.OrderDto;
 import com.coffee.domain.order.service.OrderService;
 import com.coffee.domain.payment.service.PaymentService;
@@ -49,8 +50,9 @@ public class ConcurrencyTest extends AbstractIntegrationTest{
 
         PointDto pointDto = PointDto.builder().point(5000).memberId(1L).build();
         OrderDto orderDto = OrderDto.builder().menuId(1L).memberId(1L).build();
+        CreateOrderDto createOrderDto = new CreateOrderDto(1L, 1L);
 
-        OrderDto order = orderService.createOrder(orderDto);
+        OrderDto order = orderService.createOrder(createOrderDto);
         // 스레드 풀을 만들고 작업을 비동기적으로 실행이 가능하고 작업의 완료를 기다린다.
         ExecutorService executorService = Executors.newFixedThreadPool(2);
 

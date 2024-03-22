@@ -43,6 +43,7 @@ public class PaymentService {
 
         return PaymentDto.builder()
                 .remainPoint(member.getPoint())
+                .isPaySuccess(true)
                 .build();
     }
     public void increaseMenuCnt(Long menuId) {

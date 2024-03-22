@@ -1,5 +1,6 @@
 package com.coffee.api.order.request;
 
+import com.coffee.domain.order.dto.CreateOrderDto;
 import com.coffee.domain.order.dto.OrderDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +8,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CreateOrderRequest {
+
     private Long memberId;
     private Long menuId;
-    public static OrderDto from(CreateOrderRequest request) {
-        return OrderDto.builder()
-                .memberId(request.getMemberId())
-                .menuId(request.getMenuId())
-                .build();
+
+    public static CreateOrderDto from(CreateOrderRequest request) {
+        return new CreateOrderDto(request.menuId, request.memberId);
     }
 }
