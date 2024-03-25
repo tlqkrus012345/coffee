@@ -9,6 +9,7 @@ import com.coffee.domain.payment.dto.PaymentDto;
 import com.coffee.domain.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class CafeFacade {
 
         return menuService.getPopularMenu(startDate, endDate);
     }
+    @Transactional
     public PaymentDto orderAndPay(CreateOrderDto createOrderDto) {
         Long orderId = orderService.createOrder(createOrderDto).getOrderId();
         return paymentService.pay(orderId);

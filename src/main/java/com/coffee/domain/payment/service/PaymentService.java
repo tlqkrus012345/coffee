@@ -20,7 +20,7 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final MenuRepository menuRepository;
-    @Transactional
+
     public PaymentDto pay(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         Member member = memberRepository.findById(order.getMemberId()).orElseThrow();

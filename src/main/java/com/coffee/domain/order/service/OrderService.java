@@ -21,7 +21,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final MenuRepository menuRepository;
     private final OrderRepository orderRepository;
-    @Transactional
+
     public OrderDto createOrder(CreateOrderDto createOrderDto) {
         Long memberId = createOrderDto.getMemberId();
         Long menuId = createOrderDto.getMenuId();
