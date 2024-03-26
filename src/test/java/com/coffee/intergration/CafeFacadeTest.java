@@ -1,13 +1,17 @@
 package com.coffee.intergration;
 
 import com.coffee.api.CafeFacade;
+import com.coffee.api.event.CreatedOrderEvent;
 import com.coffee.domain.member.entity.Member;
 import com.coffee.domain.member.entity.MemberRepository;
 import com.coffee.domain.menu.entity.Menu;
 import com.coffee.domain.menu.entity.MenuRepository;
 import com.coffee.domain.order.dto.CreateOrderDto;
 import com.coffee.domain.payment.dto.PaymentDto;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
@@ -48,7 +52,7 @@ public class CafeFacadeTest extends AbstractIntegrationTest {
 
         Assertions.assertEquals(paymentDto.getRemainPoint(), 10000 - 1000);
 
-        int count = (int) applicationEvents.stream().count();
+        int count = (int) applicationEvents.stream(CreatedOrderEvent.class).count();
         Assertions.assertEquals(1, count);
     }
 }
