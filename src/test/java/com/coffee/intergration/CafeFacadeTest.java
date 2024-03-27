@@ -46,7 +46,7 @@ public class CafeFacadeTest extends AbstractIntegrationTest {
     @Test
     @DisplayName("주문 결제 로직과 전송 로직 테스트")
     @Transactional
-    public void Async_OrderAndPay_Send() {
+    public void OrderAndPay_Send() {
         CreateOrderDto createOrderDto = CreateOrderDto.builder().memberId(1L).menuId(1L).build();
         PaymentDto paymentDto = cafeFacade.orderAndPay(createOrderDto);
 
